@@ -19,12 +19,9 @@ describe("GET /candies", function(done){
     api.get("/candies")
     .set("Accept", "application/json")
     .end(function(error, response){
-      Candy.find(function(err, candies){
-        expect(response.body.length).to.eq(candies.length)
-        done()
-      });
-
-    })
+      expect(response.body).to.be.an.instanceof(Array);
+      done()
+    });
   });
 
   it("should return all the records in the database", function(done){
@@ -54,7 +51,7 @@ describe("GET /candies/:id", function(){
 
 
   it("should return a 200 response", function(done){
-    api.get("/candies/"+candyId)
+    api.get("/candies/" + candyId)
     .set("Accept", "application/json")
     .end(function(err, response){
       expect(response.status).to.be.eq(200);
@@ -63,11 +60,13 @@ describe("GET /candies/:id", function(){
   });
 
   it("should return an object containing fields name and color", function(done){
-    api.get("/candies/"+candyId)
+    api.get("/candies/" + candyId)
     .set("Accept", "application/json")
     .end(function(error, response){
-      expect(response.body.candy).to.have.property("name")
-      expect(response.body.candy).to.have.property("color")
+      expect(response.body.candy).to.have.property("name");
+      expect(response.body.candy.name).to.be.eq('Lollipop');
+      expect(response.body.candy).to.have.property("color");
+      expect(response.body.candy.color).to.be.eq('Red');
       done()
     })
   });
@@ -118,43 +117,31 @@ describe("POST /candies", function(){
       })
     });
   });
-
-  it("should return an error if the color is wrong", function(done){
-    api.post("/candies")
-    .set("Accept", "application/json")
-    .send({ "name": "Lollipop", "color": "Pink" })
-    .end(function(error, response){
-      done()
-    })
-  });
 });
 
 describe("PUT /candies/:id", function(done){
   var candyId;
 
   before(function(done){
-
     api.get("/candies")
     .set("Accept", "application/json")
-    .send({ "name": "Lollipop", "color": "Red" })
     .end(function(error, response){
+      // Get the ID of the first Candy
       candyId = response.body[0]._id
       done()
     })
   })
 
   it("should return a 200 response", function(){
-    api.patch("/candies/"+candyId)
+    api.patch("/candies/" + candyId)
     .set("Accept", "application/json")
-    .send({ "name": "Lollipop" })
     .end(function(err, response){
       expect(response.status).to.be.eq(200)
     })
   });
 
-
   it("should update a candy document", function(done){
-    api.patch("/candies/"+candyId)
+    api.patch("/candies/" + candyId)
     .set("Accept", "application/json")
     .send({ "color": "Green" })
     .end(function(error, response){
@@ -175,12 +162,11 @@ describe("DELETE /candies/:id", function(done){
       candyId = candy._id
       done()
     })
-
   })
 
   it("should remove a candy document", function(done){
     Candy.count(candyId, function(err, beforeCount){
-      api.delete("/candies/"+candyId)
+      api.delete("/candies/" + candyId)
       .set("Accept", "application/json")
       .end(function(error, response){
         Candy.count(candyId, function(err, afterCount){
