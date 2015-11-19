@@ -1,14 +1,4 @@
----
-title: Testing with Mocha/Chai Lab
-type: lab
-duration: "1:25"
-creator:
-    name: Gerry Mathe
-    city: London
-competencies: Testing
----
-
-# Teseting with Mocha/Chai Lab
+# Testing with Mocha/Chai Lab
 
 ## Introduction
 
@@ -17,8 +7,6 @@ competencies: Testing
 Now that we've written a few tests in our Express application from the previous lesson, it's your turn to practice writing more tests using a more more complex version of our Candies app that uses mongo and has more functionality.
 
 At the end of this lab, you should have test written to make sure our index works properly, our show pages return the information we need, we can update and post a candy with error handling, and we can delete a candy from our database.
-
-
 
 ## Exercise
 
